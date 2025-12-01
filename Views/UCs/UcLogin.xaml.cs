@@ -1,24 +1,10 @@
 ﻿using Revision.Business;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Revision.Views.UCs
 {
-    /// <summary>
-    /// Logique d'interaction pour UcLogin.xaml
-    /// </summary>
+    // Login form user control
     public partial class UcLogin : UserControl
     {
         public UcLogin()
@@ -26,6 +12,8 @@ namespace Revision.Views.UCs
             InitializeComponent();
         }
 
+        // Sync PasswordBox text to the business class
+        // (We can't use binding for PasswordBox for security reasons)
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (this.DataContext is LoginBusiness loginBusiness)
@@ -35,5 +23,4 @@ namespace Revision.Views.UCs
         }
     }
 }
-
 

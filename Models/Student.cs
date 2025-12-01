@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace Revision.Models
 {
+    // Student model class - represents a single student
     public class Student : INotifyPropertyChanged
     {
+        // Private fields to store data
         private string _nom;
         private string _prenom;
 
+        // Property for student's last name
         public string Nom
         {
             get { return _nom; }
@@ -20,11 +18,12 @@ namespace Revision.Models
                 if (_nom != value)
                 {
                     _nom = value;
-                    OnPropertyChanged(nameof(Nom));
+                    OnPropertyChanged(nameof(Nom)); // Notify UI when value changes
                 }
             }
         }
 
+        // Property for student's first name
         public string Prenom
         {
             get { return _prenom; }
@@ -33,16 +32,19 @@ namespace Revision.Models
                 if (_prenom != value)
                 {
                     _prenom = value;
-                    OnPropertyChanged(nameof(Prenom));
+                    OnPropertyChanged(nameof(Prenom)); // Notify UI when value changes
                 }
             }
         }
 
+        // Event for property change notification - required for DataGrid to update
         public event PropertyChangedEventHandler PropertyChanged;
 
+        // Helper method to raise PropertyChanged event
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
+

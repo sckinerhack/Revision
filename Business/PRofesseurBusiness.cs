@@ -1,67 +1,75 @@
 ﻿using Prism.Commands;
 using Revision.Models;
 using Revision.Views;
-using Revision.Views.UCs;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Revision.Business
 {
+    // Business logic for managing professors - same structure as StudentBusiness
     public class PRofesseurBusiness
     {
-        public ObservableCollection<Professeur> ListOfObjects { get; set; } =
-            new ObservableCollection<Professeur>();
+        // Collection of professors shown in the DataGrid
+        public ObservableCollection<Professeur> ListOfObjects { get; set; } = new ObservableCollection<Professeur>();
 
+        // Button labels
         public string ButtonAddContent { get; set; }
         public string ButtonEditContent { get; set; }
         public string ButtonDeleteContent { get; set; }
 
+        // Label text for the page
         public string LabelContent { get; set; }
 
+        // Commands for buttons
         public DelegateCommand AddCommand { get; set; }
         public DelegateCommand EditCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
 
+        // Track which professor is selected
         private Professeur _selectedProfessor = null;
+
+        // Reference to the parent window
         private Window _parentWindow = null;
 
+        // Constructor
         public PRofesseurBusiness()
         {
+            // Set button labels
             ButtonAddContent = "Ajouter un Prof";
             ButtonEditContent = "Modifier un Prof";
             ButtonDeleteContent = "Supprimer un Prof";
-            LabelContent = "Gestion Des Prof";
-            
+            LabelContent = "Gestion Des Professeurs";
+
+            // Connect buttons to methods
             AddCommand = new DelegateCommand(AddProfesseur);
             EditCommand = new DelegateCommand(EditProfesseur);
             DeleteCommand = new DelegateCommand(DeleteProfesseur);
-            
+
+            // Create 10 sample professors
             for (int i = 0; i < 10; i++)
             {
                 Professeur prof = new Professeur();
                 prof.Nom = "Bakkali" + i.ToString();
                 prof.Prenom = "Ahmed" + i.ToString();
                 prof.CIN = "CIN" + i.ToString();
-
                 ListOfObjects.Add(prof);
             }
         }
 
+        // Set which professor is selected
         public void SetSelectedProfessor(Professeur professor)
         {
             _selectedProfessor = professor;
         }
 
+        // Set the parent window
         public void SetParentWindow(Window parentWindow)
         {
             _parentWindow = parentWindow;
         }
 
+        // Add a new professor
         private void AddProfesseur()
         {
             try
@@ -69,7 +77,7 @@ namespace Revision.Business
                 AddEditProfessorWindow window = new AddEditProfessorWindow();
                 if (_parentWindow != null)
                     window.Owner = _parentWindow;
-                
+
                 if (window.ShowDialog() == true)
                 {
                     ListOfObjects.Add(window.Professor);
@@ -82,6 +90,7 @@ namespace Revision.Business
             }
         }
 
+        // Edit the selected professor
         private void EditProfesseur()
         {
             try
@@ -95,7 +104,7 @@ namespace Revision.Business
                 AddEditProfessorWindow window = new AddEditProfessorWindow(_selectedProfessor);
                 if (_parentWindow != null)
                     window.Owner = _parentWindow;
-                
+
                 if (window.ShowDialog() == true)
                 {
                     MessageBox.Show("Professor updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -107,6 +116,7 @@ namespace Revision.Business
             }
         }
 
+        // Delete the selected professor
         private void DeleteProfesseur()
         {
             try

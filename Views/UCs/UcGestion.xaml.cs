@@ -1,23 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Revision.Views.UCs
 {
-    /// <summary>
-    /// Logique d'interaction pour UcGestion.xaml
-    /// </summary>
+    // Grid view user control - displays students or professors
     public partial class UcGestion : UserControl
     {
         public UcGestion()
@@ -26,68 +12,45 @@ namespace Revision.Views.UCs
             this.Loaded += UcGestion_Loaded;
         }
 
+        // Called when the grid is fully loaded
         private void UcGestion_Loaded(object sender, RoutedEventArgs e)
         {
-            // Wire up the DataGrid selection change event to notify the business class
+            // Setup grid selection event
             if (GestionGrid != null)
             {
                 GestionGrid.SelectionChanged += GestionGrid_SelectionChanged;
             }
 
-            // Find parent window and pass it to business class
+            // Pass parent window reference to business class
             Window parentWindow = Window.GetWindow(this);
-            if (parentWindow != null)
+            if (parentWindow != null && this.DataContext != null)
             {
-                var businessContext = this.DataContext;
-                if (businessContext != null)
+                // Get the business class type and call SetParentWindow if it exists
+                var businessType = this.DataContext.GetType().Name;
+                var method = this.DataContext.GetType().GetMethod("SetParentWindow");
+                if (method != null)
                 {
-                    var methodType = businessContext.GetType().Name;
-                    if (methodType == "StudentBusiness")
-                    {
-                        var method = businessContext.GetType().GetMethod("SetParentWindow");
-                        if (method != null)
-                        {
-                            method.Invoke(businessContext, new[] { parentWindow });
-                        }
-                    }
-                    else if (methodType == "PRofesseurBusiness")
-                    {
-                        var method = businessContext.GetType().GetMethod("SetParentWindow");
-                        if (method != null)
-                        {
-                            method.Invoke(businessContext, new[] { parentWindow });
-                        }
-                    }
+                    method.Invoke(this.DataContext, new[] { parentWindow });
                 }
             }
         }
 
+        // Called when user selects a row in the grid
         private void GestionGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedItem = GestionGrid.SelectedItem;
             
-            // Notify the business class (which could be StudentBusiness or PRofesseurBusiness)
-            var businessContext = this.DataContext;
-            
-            if (businessContext != null)
+            if (selectedItem != null && this.DataContext != null)
             {
-                // Use reflection to call SetSelectedStudent or SetSelectedProfessor
-                var methodType = businessContext.GetType().Name;
-                if (methodType == "StudentBusiness")
+                // Determine which business class this is and call appropriate method
+                var businessType = this.DataContext.GetType().Name;
+                string methodName = (businessType == "StudentBusiness") ? "SetSelectedStudent" : "SetSelectedProfessor";
+                
+                var method = this.DataContext.GetType().GetMethod(methodName);
+                if (method != null)
                 {
-                    var method = businessContext.GetType().GetMethod("SetSelectedStudent");
-                    if (method != null)
-                    {
-                        method.Invoke(businessContext, new[] { selectedItem });
-                    }
-                }
-                else if (methodType == "PRofesseurBusiness")
-                {
-                    var method = businessContext.GetType().GetMethod("SetSelectedProfessor");
-                    if (method != null)
-                    {
-                        method.Invoke(businessContext, new[] { selectedItem });
-                    }
+                    // Call the SetSelected* method to update the business class
+                    method.Invoke(this.DataContext, new[] { selectedItem });
                 }
             }
         }

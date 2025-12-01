@@ -1,20 +1,18 @@
 ﻿using Prism.Commands;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Revision.Business
 {
+    // Business logic for login authentication
     public class LoginBusiness : INotifyPropertyChanged
     {
+        // Private fields for properties
         private string _username = "";
         private string _password = "";
         private string _errorMessage = "";
-        private bool _isLoading = false;
 
+        // Public property for username - binds to TextBox
         public string Username
         {
             get { return _username; }
@@ -28,6 +26,7 @@ namespace Revision.Business
             }
         }
 
+        // Public property for password - synced from PasswordBox
         public string Password
         {
             get { return _password; }
@@ -41,6 +40,7 @@ namespace Revision.Business
             }
         }
 
+        // Public property for error message - shows when login fails
         public string ErrorMessage
         {
             get { return _errorMessage; }
@@ -54,55 +54,50 @@ namespace Revision.Business
             }
         }
 
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set
-            {
-                if (_isLoading != value)
-                {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                }
-            }
-        }
-
+        // Command for Login button
         public DelegateCommand LoginCommand { get; set; }
+
+        // Event fired when login is successful
         public event EventHandler LoginSuccessful;
 
+        // Event required for property binding
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Constructor - initialize the Login command
         public LoginBusiness()
         {
             LoginCommand = new DelegateCommand(Login);
         }
 
+        // Login method - called when Login button is clicked
         private void Login()
         {
-            ErrorMessage = "";
+            ErrorMessage = ""; // Clear previous error
 
+            // Check if username and password are entered
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
                 ErrorMessage = "Please enter username and password";
                 return;
             }
 
-            // Simple dummy authentication: admin / admin
+            // Check credentials - username: admin, password: admin
             if (Username == "admin" && Password == "admin")
             {
-                // Raise event to notify that login was successful
+                // Login successful - fire event to open main window
                 LoginSuccessful?.Invoke(this, EventArgs.Empty);
             }
             else
             {
+                // Login failed
                 ErrorMessage = "Invalid username or password";
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        // Helper method to raise PropertyChanged event
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
-
