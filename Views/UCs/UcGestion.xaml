@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="Revision.Views.UCs.UcGestion"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Revision.Views.UCs"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="153*"/>
+            <ColumnDefinition Width="647*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77*"/>
+            <RowDefinition Height="373*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" Content="{Binding LabelContent}" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="57" Width="313" FontSize="18"/>
+        <Button Content="{Binding ButtonAddContent}" Command="{Binding AddCommand}" HorizontalAlignment="Center" Margin="0,84,0,0" Grid.Row="1" VerticalAlignment="Top" Width="98"/>
+        <Button Content="{Binding ButtonEditContent}" Command="{Binding EditCommand}" HorizontalAlignment="Center" Margin="0,148,0,0" Grid.Row="1" VerticalAlignment="Top" Width="95"/>
+        <Button Content="{Binding ButtonDeleteContent}" Command="{Binding DeleteCommand}" HorizontalAlignment="Center" Margin="0,209,0,0" Grid.Row="1" VerticalAlignment="Top" Width="94"/>
+        <DataGrid x:Name="GestionGrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ListOfObjects}"/>
+
+    </Grid>
+</UserControl>
+
